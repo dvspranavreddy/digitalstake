@@ -42,6 +42,7 @@ app.use('/api/winners', require('./routes/winners'));
 app.use('/api/admin', require('./routes/admin'));
 
 // Health check
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -52,8 +53,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🏌️ Golf Charity Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`🏌️ Golf Charity Server running on port ${port}`);
 });
 
 module.exports = app;
