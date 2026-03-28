@@ -1029,7 +1029,7 @@ const Admin = () => {
                         <td className="prize-col">₹{(w.prize_amount / 100).toLocaleString('en-IN')}</td>
                         <td>
                           {w.proof_url ? (
-                            <a href={`${import.meta.env.VITE_API_URL?.replace('/api', '')}${w.proof_url}`} target="_blank" rel="noreferrer" className="proof-link">View</a>
+                            <a href={w.proof_url?.startsWith('http') ? w.proof_url : `${import.meta.env.VITE_API_URL?.replace('/api', '')}${w.proof_url}`} target="_blank" rel="noreferrer" className="proof-link">View</a>
                           ) : 'None'}
                         </td>
                         <td><span className={`v-status vs-${w.verification_status}`}>{w.verification_status}</span></td>

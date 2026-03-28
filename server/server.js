@@ -11,11 +11,7 @@ const port = process.env.PORT || 5000;
 //   console.log("Server running on port " + port);
 // });
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// Platform uses entirely stateless endpoints and external cloud storage for media
 
 // Middleware
 app.use(cors({
@@ -24,7 +20,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(uploadsDir));
+
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

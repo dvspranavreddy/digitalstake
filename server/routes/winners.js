@@ -5,16 +5,10 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
 
-// Configure multer for proof uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '..', 'uploads'));
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `proof_${req.user.id}_${Date.now()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
-  },
-});
+const supabase = require('../config/supabase');
+
+// Configure multer for memory storage instead of disk (Stateless architecture for Render)
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
@@ -51,7 +45,28 @@ router.post('/:id/upload-proof', authenticate, upload.single('proof'), async (re
     if (!req.file) {
       return res.status(400).json({ error: 'Proof file is required' });
     }
-    const proofUrl = `/uploads/${req.file.filename}`;
+    
+    // Generate a secure unique filename
+    const uniqueName = `proof_${req.user.id}_${Date.now()}${path.extname(req.file.originalname).toLowerCase()}`;
+    
+    // Upload buffer directly to Supabase public bucket 'proofs'
+    const { data: uploadData, error: uploadError } = await supabase
+      .storage
+      .from('proofs')
+      .upload(uniqueName, req.file.buffer, {
+        contentType: req.file.mimetype,
+        upsert: false
+      });
+      
+    if (uploadError) {
+      console.error('[STORAGE ERROR]', uploadError);
+      throw new Error(`Cloud storage upload failed: ${uploadError.message}. Make sure the 'proofs' bucket exists and is public.`);
+    }
+    
+    // Extract the highly available absolute public URL
+    const { data: publicUrlData } = supabase.storage.from('proofs').getPublicUrl(uniqueName);
+    const proofUrl = publicUrlData.publicUrl;
+
     const winner = await winnerService.uploadProof(req.params.id, req.user.id, proofUrl);
     res.json(winner);
   } catch (err) {
