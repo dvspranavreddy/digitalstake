@@ -463,4 +463,42 @@
   .charities-grid { grid-template-columns: 1fr; }
   .modal-body { padding: 2rem; }
   .charities-controls { flex-direction: column; align-items: stretch; }
+
+  .impact-breakdown {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .donation-input-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .donation-input {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .btn-donate-now {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .event-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .modal-hero {
+    height: 200px;
+  }
+
+  .search-wrapper {
+    min-width: 100%;
+  }
+
+  .filter-group {
+    flex-wrap: wrap;
+  }
 }

@@ -9,6 +9,7 @@ const Register = () => {
     email: '',
     password: '',
     full_name: '',
+    nickname: '',
     charity_id: '',
     charity_contribution_pct: 10,
   });
@@ -68,16 +69,26 @@ const Register = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="reg-email">Email</label>
+                <label htmlFor="nickname">Nickname</label>
                 <input
-                  id="reg-email"
-                  type="email"
-                  value={form.email}
-                  onChange={e => setForm({ ...form, email: e.target.value })}
-                  placeholder="you@example.com"
-                  required
+                  id="nickname"
+                  type="text"
+                  value={form.nickname}
+                  onChange={e => setForm({ ...form, nickname: e.target.value })}
+                  placeholder="johnd"
                 />
               </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="reg-email">Email</label>
+              <input
+                id="reg-email"
+                type="email"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                placeholder="you@example.com"
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="reg-password">Password</label>

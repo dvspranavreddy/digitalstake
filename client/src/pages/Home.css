@@ -591,4 +591,6 @@
   .sub-overview-grid { flex-direction: column; gap: 2rem; }
   .overview-group { width: 100%; }
   .dash-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .prize-grid { grid-template-columns: 1fr; }
 }

@@ -4,7 +4,7 @@ const supabase = require('../config/supabase');
 
 const SALT_ROUNDS = 10;
 
-const register = async ({ email, password, full_name, charity_id, charity_contribution_pct }) => {
+const register = async ({ email, password, full_name, nickname, charity_id, charity_contribution_pct }) => {
   // Check if user exists
   const { data: existing } = await supabase
     .from('users')
@@ -25,6 +25,7 @@ const register = async ({ email, password, full_name, charity_id, charity_contri
       email: email.toLowerCase(),
       password_hash,
       full_name,
+      nickname: nickname || null,
       role: 'user',
       charity_id: charity_id || null,
       charity_contribution_pct: contribution,

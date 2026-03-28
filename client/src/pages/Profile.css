@@ -156,6 +156,15 @@
   .profile-card {
     padding: 2rem 1.5rem;
   }
+
+  .profile-form .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .draw-numbers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .draw-numbers-container {
