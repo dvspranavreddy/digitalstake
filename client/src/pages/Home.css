@@ -593,4 +593,14 @@
   .dash-grid { grid-template-columns: 1fr; }
   .steps-grid { grid-template-columns: 1fr; }
   .prize-grid { grid-template-columns: 1fr; }
+  .charity-grid { grid-template-columns: 1fr; }
+
+  .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+  .stat-divider { display: none; }
+
+  .charity-image { height: 200px; }
+  .charity-info h3 { font-size: 1.1rem; }
+
+  .stats-strip-grid { grid-template-columns: 1fr; }
+  .dash-card { height: auto; min-height: 280px; }
 }
