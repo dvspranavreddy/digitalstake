@@ -1,0 +1,183 @@
+/* ─── SUBSCRIPTION GATE / PAYWALL ─── */
+.sub-gate-page {
+  padding-top: 100px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-bottom: 4rem;
+}
+
+.sub-gate-container {
+  max-width: 560px;
+  width: 100%;
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+}
+
+.sub-gate-card {
+  background: white;
+  border: 1px solid rgba(255, 126, 179, 0.2);
+  border-radius: 24px;
+  padding: 3.5rem 3rem;
+  text-align: center;
+  box-shadow:
+    0 4px 30px rgba(251, 113, 133, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.sub-gate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #fb7185, #f59e0b, #e11d48);
+}
+
+.sub-gate-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.25rem;
+  animation: gatePulse 2s ease-in-out infinite;
+}
+
+@keyframes gatePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.sub-gate-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #e11d48, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.sub-gate-message {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sub-gate-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  text-align: left;
+  padding: 1.5rem;
+  background: rgba(255, 126, 179, 0.03);
+  border: 1px solid rgba(255, 126, 179, 0.1);
+  border-radius: 16px;
+}
+
+.sub-gate-benefit {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 0.4rem 0;
+}
+
+.benefit-icon {
+  font-size: 1.2rem;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sub-gate-cta {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 25px rgba(225, 29, 72, 0.3);
+  letter-spacing: 0.01em;
+}
+
+.sub-gate-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 35px rgba(225, 29, 72, 0.4);
+  background: linear-gradient(135deg, #be123c, #e11d48);
+}
+
+.sub-gate-pricing {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Inline gate variant (smaller, used inside sections) */
+.sub-gate-inline {
+  background: rgba(255, 126, 179, 0.04);
+  border: 1px dashed rgba(225, 29, 72, 0.25);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.sub-gate-inline .sub-gate-inline-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sub-gate-inline .sub-gate-inline-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.sub-gate-inline .sub-gate-inline-cta {
+  display: inline-block;
+  padding: 0.65rem 1.8rem;
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.2);
+}
+
+.sub-gate-inline .sub-gate-inline-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.35);
+}
+
+@media (max-width: 600px) {
+  .sub-gate-card {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .sub-gate-title {
+    font-size: 1.4rem;
+  }
+
+  .sub-gate-cta {
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+  }
+}
