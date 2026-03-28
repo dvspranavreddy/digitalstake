@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { adminService, drawService, winnerService, charityService } from '../services/endpoints';
+import { adminService, drawService, winnerService, charityService, campaignAdminService } from '../services/endpoints';
 import './Admin.css';
 
 // ─── Modal MUST be outside Admin to prevent re-mount on state changes ───
@@ -34,6 +34,11 @@ const Admin = () => {
   // Charity form
   const [charityForm, setCharityForm] = useState({ name: '', description: '', image_url: '', featured: false, events: [] });
   const [editingCharity, setEditingCharity] = useState(null);
+
+  // Campaigns
+  const [campaigns, setCampaigns] = useState([]);
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [campaignForm, setCampaignForm] = useState({ name: '', code: '', type: 'discount', discount_pct: 10, target_charity_id: '' });
 
   // Draws
   const [drawLogic, setDrawLogic] = useState('random');
@@ -87,6 +92,12 @@ const Admin = () => {
         case 'charities':
           setCharities((await charityService.getAll()).data);
           break;
+        case 'campaigns': {
+          const [campRes, charRes] = await Promise.all([campaignAdminService.getAll(), charityService.getAll()]);
+          setCampaigns(campRes.data);
+          setCharities(charRes.data);
+          break;
+        }
       }
     } catch (err) {
       console.error(err);
@@ -341,6 +352,44 @@ const Admin = () => {
         featured: c.featured || false,
         events: c.events || []
       });
+  };
+
+  // ─── CAMPAIGN CRUD ───
+  const handleCreateCampaign = async (e) => {
+    e.preventDefault();
+    setActionLoading('create-campaign');
+    try {
+      await campaignAdminService.create(campaignForm);
+      showMsg('Campaign created!');
+      setShowCampaignModal(false);
+      setCampaignForm({ name: '', code: '', type: 'discount', discount_pct: 10, target_charity_id: '' });
+      fetchData();
+    } catch (err) {
+      showMsg('Error: ' + (err.response?.data?.error || 'Failed'));
+    } finally {
+      setActionLoading('');
+    }
+  };
+
+  const handleToggleCampaign = async (c) => {
+    try {
+      await campaignAdminService.toggle(c.id, c.active);
+      showMsg('Campaign status updated!');
+      fetchData();
+    } catch (err) {
+      showMsg('Error updating campaign');
+    }
+  };
+
+  const handleDeleteCampaign = async (id) => {
+    if (!confirm('Permanently delete this campaign?')) return;
+    try {
+      await campaignAdminService.delete(id);
+      showMsg('Campaign deleted!');
+      fetchData();
+    } catch (err) {
+      showMsg('Error: ' + (err.response?.data?.error || 'Failed (ensure no users are bound to it)'));
+    }
   };
 
   return (
@@ -628,18 +677,99 @@ const Admin = () => {
               </>
             )}
 
-            {/* ─── Campaigns Tab (Placeholder) ─── */}
+            {/* ─── Campaigns Tab ─── */}
             {tab === 'campaigns' && (
-              <div className="admin-actions-bar" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(96,165,250,0.03)', border: '1px dashed rgba(96,165,250,0.3)', padding: '4rem 2rem', borderRadius: '12px', marginBottom: '2rem', textAlign: 'center' }}>
-                <h3 style={{ margin: '0 0 1rem 0', color: '#3b82f6', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  Campaign Module
-                  <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', background: '#dbeafe', color: '#1d4ed8', borderRadius: '6px', textTransform: 'uppercase', fontWeight: '800' }}>Coming Soon</span>
-                </h3>
-                <p style={{ margin: '0 0 1.5rem 0', color: 'var(--text-secondary)', maxWidth: '540px', lineHeight: '1.6' }}>
-                  The structural database foundation for the Campaign Module has been prepared. Once activated, you will be able to manage promotional codes, multi-country localization variants, corporate group invitations, and specialized charity routing algorithms from this dashboard.
-                </p>
-                <button className="btn-primary" disabled style={{ opacity: 0.6, cursor: 'not-allowed', background: '#94a3b8', borderColor: '#94a3b8' }}>Module Inactive</button>
-              </div>
+              <>
+                <div className="admin-toolbar">
+                  <button className="btn-primary btn-sm" onClick={() => setShowCampaignModal(true)} id="add-campaign-btn">
+                    + Assign Campaign Code
+                  </button>
+                  <span className="toolbar-count">{campaigns.length} campaigns</span>
+                </div>
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Campaign</th>
+                        <th>Code</th>
+                        <th>Type / Discount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {campaigns.map(c => (
+                        <tr key={c.id}>
+                          <td>
+                            <strong>{c.name}</strong><br/>
+                            <small style={{ color: 'var(--text-muted)' }}>{new Date(c.created_at).toLocaleDateString()}</small>
+                          </td>
+                          <td><span style={{ fontFamily: 'monospace', fontWeight: 800, color: 'var(--accent-violet)', background: 'rgba(139,92,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '4px' }}>{c.code}</span></td>
+                          <td>
+                            <span style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>{c.type}</span> 
+                            {c.discount_pct > 0 ? ` (${c.discount_pct}% Off)` : ''}
+                            {c.target_charity && <div><small>Targets: {c.target_charity.name}</small></div>}
+                          </td>
+                          <td>
+                            <span className={`status-badge ${c.active ? 'sb-active' : 'sb-expired'}`}>{c.active ? 'Active' : 'Inactive'}</span>
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                              <button className={`btn-xs ${c.active ? 'btn-reject' : 'btn-approve'}`} onClick={() => handleToggleCampaign(c)}>
+                                {c.active ? 'Deactivate' : 'Activate'}
+                              </button>
+                              <button className="btn-xs btn-delete" onClick={() => handleDeleteCampaign(c.id)}>Delete</button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {campaigns.length === 0 && <p className="admin-empty">No active campaigns.</p>}
+                </div>
+                
+                {showCampaignModal && (
+                  <Modal title="Create New Campaign" onClose={() => setShowCampaignModal(false)}>
+                    <form onSubmit={handleCreateCampaign} className="modal-form">
+                      <div className="form-group">
+                        <label>Campaign Title</label>
+                        <input type="text" value={campaignForm.name} onChange={e => setCampaignForm({...campaignForm, name: e.target.value})} required placeholder="e.g. Summer Blowout" />
+                      </div>
+                      <div className="form-group">
+                        <label>Promo Code</label>
+                        <input type="text" value={campaignForm.code} onChange={e => setCampaignForm({...campaignForm, code: e.target.value})} required placeholder="e.g. SUMMER50" style={{ textTransform: 'uppercase' }} />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Campaign Type</label>
+                          <select value={campaignForm.type} onChange={e => setCampaignForm({...campaignForm, type: e.target.value})}>
+                            <option value="discount">Direct Discount</option>
+                            <option value="corporate">Corporate Track</option>
+                            <option value="referral">Referral Code</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label>Discount Pct (%)</label>
+                          <input type="number" min="0" max="100" value={campaignForm.discount_pct} onChange={e => setCampaignForm({...campaignForm, discount_pct: e.target.value})} />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Force Specific Charity Option (Optional)</label>
+                        <select value={campaignForm.target_charity_id} onChange={e => setCampaignForm({...campaignForm, target_charity_id: e.target.value})}>
+                          <option value="">-- None (Allow user choice) --</option>
+                          {charities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                      </div>
+                      <div className="form-actions">
+                        <button type="submit" className="btn-primary btn-sm" disabled={actionLoading === 'create-campaign'}>
+                          {actionLoading === 'create-campaign' ? 'Creating...' : 'Launch Campaign'}
+                        </button>
+                        <button type="button" className="btn-secondary btn-sm" onClick={() => setShowCampaignModal(false)}>Cancel</button>
+                      </div>
+                    </form>
+                  </Modal>
+                )}
+              </>
             )}
 
             {/* ─── Draws Tab ─── */}

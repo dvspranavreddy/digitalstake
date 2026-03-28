@@ -66,3 +66,10 @@ export const adminService = {
   getSubscriptions: () => api.get('/admin/subscriptions'),
   cancelSubscription: (id) => api.put(`/admin/subscriptions/${id}/cancel`),
 };
+
+export const campaignAdminService = {
+  getAll: () => api.get('/admin/campaigns'),
+  create: (data) => api.post('/admin/campaigns', data),
+  toggle: (id, active) => api.put(`/admin/campaigns/${id}/toggle`, { active }),
+  delete: (id) => api.delete(`/admin/campaigns/${id}`),
+};

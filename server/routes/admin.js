@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminService = require('../services/adminService');
 const scoreService = require('../services/scoreService');
+const campaignService = require('../services/campaignService');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
 
@@ -119,6 +120,49 @@ router.get('/users/:id/scores', authenticate, requireAdmin, async (req, res) => 
     res.json(scores);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── CAMPAIGNS ───
+router.get('/campaigns', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const campaigns = await campaignService.getAllCampaigns();
+    res.json(campaigns);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/campaigns', authenticate, requireAdmin, validate({
+  name: { required: true, type: 'string', minLength: 1 },
+  code: { required: true, type: 'string', minLength: 3 },
+  type: { required: true, type: 'string', enum: ['discount', 'corporate', 'referral'] },
+  discount_pct: { required: false },
+  target_charity_id: { required: false }
+}), async (req, res) => {
+  try {
+    const campaign = await campaignService.createCampaign(req.body);
+    res.status(201).json(campaign);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put('/campaigns/:id/toggle', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const campaign = await campaignService.toggleCampaign(req.params.id, req.body.active);
+    res.json(campaign);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.delete('/campaigns/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    await campaignService.deleteCampaign(req.params.id);
+    res.json({ success: true, message: 'Campaign deleted' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
