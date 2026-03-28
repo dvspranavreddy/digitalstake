@@ -10,31 +10,32 @@ const getAnalytics = async () => {
     .select('id', { count: 'exact' })
     .eq('role', 'user');
 
-  // Active subscriptions
+  // Active subscriptions with user charity pct
   const { data: activeSubs, count: activeSubCount } = await supabase
     .from('subscriptions')
-    .select('id, amount', { count: 'exact' })
+    .select(`
+      id, amount,
+      users ( charity_contribution_pct )
+    `)
     .eq('status', 'active');
 
-  // Total revenue
+  // Exact MRR / current pool
   const totalRevenue = activeSubs
     ? activeSubs.reduce((sum, s) => sum + (s.amount || 0), 0)
     : 0;
 
-  // Prize pool total
+  // Prize pool total (50%)
   const prizePoolTotal = Math.floor(totalRevenue * 0.5);
 
-  // Total charity contributions
-  const { data: charityUsers } = await supabase
-    .from('users')
-    .select('charity_contribution_pct')
-    .not('charity_id', 'is', null);
-
-  const avgContribution = charityUsers && charityUsers.length > 0
-    ? charityUsers.reduce((sum, u) => sum + u.charity_contribution_pct, 0) / charityUsers.length
-    : 10;
-
-  const totalCharityContributions = Math.floor(totalRevenue * (avgContribution / 100));
+  // Exact charity contributions mapped from individual subscriptions
+  const totalCharityContributions = activeSubs
+    ? activeSubs.reduce((sum, s) => {
+        // Handle array or object from join
+        const usersObj = Array.isArray(s.users) ? s.users[0] : s.users;
+        const pct = usersObj?.charity_contribution_pct || 10;
+        return sum + Math.floor((s.amount || 0) * (pct / 100));
+      }, 0)
+    : 0;
 
   // Draw statistics
   const { count: totalDraws } = await supabase
@@ -45,6 +46,28 @@ const getAnalytics = async () => {
     .from('draws')
     .select('id', { count: 'exact' })
     .eq('status', 'published');
+
+  // Jackpot Rollover from last published draw
+  const { data: publishedDrawsList } = await supabase
+    .from('draws')
+    .select('id, jackpot_amount')
+    .eq('status', 'published')
+    .order('draw_date', { ascending: false })
+    .limit(1);
+
+  let jackpotRollover = 0;
+  if (publishedDrawsList && publishedDrawsList.length > 0) {
+    const lastDraw = publishedDrawsList[0];
+    const { data: jackpotWinners } = await supabase
+      .from('winners')
+      .select('id')
+      .eq('draw_id', lastDraw.id)
+      .eq('match_type', '5-match');
+
+    if (!jackpotWinners || jackpotWinners.length === 0) {
+      jackpotRollover = lastDraw.jackpot_amount || 0;
+    }
+  }
 
   // Winner statistics
   const { count: totalWinners } = await supabase
@@ -79,10 +102,11 @@ const getAnalytics = async () => {
     totalCharityContributions,
     totalDraws: totalDraws || 0,
     publishedDraws: publishedDraws || 0,
+    simulatedDraws: (totalDraws || 0) - (publishedDraws || 0),
+    jackpotRollover,
     totalWinners: totalWinners || 0,
     totalPaidOut: paidOutAmount,
     totalCharities: charityCount || 0,
-    avgCharityContribution: Math.round(avgContribution),
     suspendedUsers: suspendedCount || 0,
   };
 };

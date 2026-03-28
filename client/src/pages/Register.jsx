@@ -12,6 +12,9 @@ const Register = () => {
     nickname: '',
     charity_id: '',
     charity_contribution_pct: 10,
+    country: 'IN',
+    account_type: 'individual',
+    company_name: '',
   });
   const [charities, setCharities] = useState([]);
   const [error, setError] = useState('');
@@ -79,6 +82,52 @@ const Register = () => {
                 />
               </div>
             </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="country">Country</label>
+                <select
+                  id="country"
+                  value={form.country}
+                  onChange={e => setForm({ ...form, country: e.target.value })}
+                  required
+                >
+                  <option value="IN">India</option>
+                  <option value="US">United States</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="account_type">Account Type</label>
+                <select
+                  id="account_type"
+                  value={form.account_type}
+                  onChange={e => setForm({ ...form, account_type: e.target.value, company_name: '' })}
+                  required
+                >
+                  <option value="individual">Individual</option>
+                  <option value="corporate">Corporate / Team</option>
+                </select>
+              </div>
+            </div>
+
+            {form.account_type === 'corporate' && (
+              <div className="form-group" style={{ animation: 'fadeInUp 0.3s ease' }}>
+                <label htmlFor="company_name">Company / Team Name</label>
+                <input
+                  id="company_name"
+                  type="text"
+                  value={form.company_name}
+                  onChange={e => setForm({ ...form, company_name: e.target.value })}
+                  placeholder="Acme Corp"
+                  required
+                />
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="reg-email">Email</label>
               <input

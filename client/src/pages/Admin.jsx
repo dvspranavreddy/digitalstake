@@ -352,7 +352,7 @@ const Admin = () => {
 
         {/* Tabs */}
         <div className="admin-tabs">
-          {['analytics', 'users', 'subscriptions', 'draws', 'winners', 'charities'].map(t => (
+          {['analytics', 'users', 'subscriptions', 'draws', 'winners', 'charities', 'campaigns'].map(t => (
             <button
               key={t}
               className={`admin-tab ${tab === t ? 'active' : ''}`}
@@ -378,6 +378,8 @@ const Admin = () => {
                 <div className="analytics-card"><span className="ac-label">Charity Total</span><span className="ac-value ac-green">₹{(analytics.totalCharityContributions / 100).toLocaleString('en-IN')}</span></div>
                 <div className="analytics-card"><span className="ac-label">Total Draws</span><span className="ac-value">{analytics.totalDraws}</span></div>
                 <div className="analytics-card"><span className="ac-label">Published Draws</span><span className="ac-value">{analytics.publishedDraws}</span></div>
+                <div className="analytics-card"><span className="ac-label">Simulated Draws</span><span className="ac-value" style={{ color: '#8b5cf6' }}>{analytics.simulatedDraws}</span></div>
+                <div className="analytics-card"><span className="ac-label">Jackpot Rollover</span><span className="ac-value ac-gold">₹{(analytics.jackpotRollover / 100).toLocaleString('en-IN')}</span></div>
                 <div className="analytics-card"><span className="ac-label">Total Winners</span><span className="ac-value">{analytics.totalWinners}</span></div>
                 <div className="analytics-card"><span className="ac-label">Paid Out</span><span className="ac-value">₹{(analytics.totalPaidOut / 100).toLocaleString('en-IN')}</span></div>
                 <div className="analytics-card"><span className="ac-label">Suspended</span><span className="ac-value" style={{color:'var(--accent-red)'}}>{analytics.suspendedUsers}</span></div>
@@ -626,21 +628,35 @@ const Admin = () => {
               </>
             )}
 
+            {/* ─── Campaigns Tab (Placeholder) ─── */}
+            {tab === 'campaigns' && (
+              <div className="admin-actions-bar" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(96,165,250,0.03)', border: '1px dashed rgba(96,165,250,0.3)', padding: '4rem 2rem', borderRadius: '12px', marginBottom: '2rem', textAlign: 'center' }}>
+                <h3 style={{ margin: '0 0 1rem 0', color: '#3b82f6', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  Campaign Module
+                  <span style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', background: '#dbeafe', color: '#1d4ed8', borderRadius: '6px', textTransform: 'uppercase', fontWeight: '800' }}>Coming Soon</span>
+                </h3>
+                <p style={{ margin: '0 0 1.5rem 0', color: 'var(--text-secondary)', maxWidth: '540px', lineHeight: '1.6' }}>
+                  The structural database foundation for the Campaign Module has been prepared. Once activated, you will be able to manage promotional codes, multi-country localization variants, corporate group invitations, and specialized charity routing algorithms from this dashboard.
+                </p>
+                <button className="btn-primary" disabled style={{ opacity: 0.6, cursor: 'not-allowed', background: '#94a3b8', borderColor: '#94a3b8' }}>Module Inactive</button>
+              </div>
+            )}
+
             {/* ─── Draws Tab ─── */}
             {tab === 'draws' && (
               <>
                 <div className="admin-actions-bar" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap', background: 'rgba(225, 29, 72, 0.03)', border: '1px solid rgba(225, 29, 72, 0.15)', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem' }}>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{ flex: '1 1 240px' }}>
+                    <h3 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                       Draw Simulation
-                      {pendingJackpot > 0 && <span style={{ background: '#fef3c7', color: '#92400e', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', border: '1px solid #f59e0b' }}>
+                      {pendingJackpot > 0 && <span style={{ background: '#fef3c7', color: '#92400e', fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '20px', border: '1px solid #f59e0b', whiteSpace: 'nowrap' }}>
                         Rollover: ₹{(pendingJackpot / 100).toLocaleString('en-IN')}
                       </span>}
                     </h3>
                     <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Run a monthly simulation to calculate prizes before publishing results.</p>
                   </div>
                   
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                     <div className="draw-logic-selector">
                       <select value={drawLogic} onChange={(e) => setDrawLogic(e.target.value)}>
                         <option value="random">Random (Standard Lottery)</option>

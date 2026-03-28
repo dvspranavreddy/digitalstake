@@ -4,7 +4,7 @@ const supabase = require('../config/supabase');
 
 const SALT_ROUNDS = 10;
 
-const register = async ({ email, password, full_name, nickname, charity_id, charity_contribution_pct }) => {
+const register = async ({ email, password, full_name, nickname, charity_id, charity_contribution_pct, country, account_type, company_name }) => {
   // Check if user exists
   const { data: existing } = await supabase
     .from('users')
@@ -19,18 +19,26 @@ const register = async ({ email, password, full_name, nickname, charity_id, char
   const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
   const contribution = Math.max(charity_contribution_pct || 10, 10);
 
+  // Remove new columns if they are undefined to prevent breaking existing schema temporarily
+  const insertPayload = {
+    email: email.toLowerCase(),
+    password_hash,
+    full_name,
+    nickname: nickname || null,
+    role: 'user',
+    charity_id: charity_id || null,
+    charity_contribution_pct: contribution,
+  };
+
+  // Only assign structural fields if provided (User must add these columns in Supabase)
+  if (country) insertPayload.country = country;
+  if (account_type) insertPayload.account_type = account_type;
+  if (company_name) insertPayload.company_name = company_name;
+
   const { data: user, error } = await supabase
     .from('users')
-    .insert({
-      email: email.toLowerCase(),
-      password_hash,
-      full_name,
-      nickname: nickname || null,
-      role: 'user',
-      charity_id: charity_id || null,
-      charity_contribution_pct: contribution,
-    })
-    .select('id, email, full_name, nickname, role, charity_id, charity_contribution_pct, created_at')
+    .insert(insertPayload)
+    .select('id, email, full_name, nickname, role, charity_id, charity_contribution_pct, created_at, country, account_type, company_name')
     .single();
 
   if (error) throw new Error(error.message);
@@ -232,7 +240,7 @@ const deleteOwnAccount = async (userId) => {
 
 const generateToken = (user) => {
   return jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
+    { id: user.id, email: user.email, role: user.role, country: user.country, account_type: user.account_type },
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );

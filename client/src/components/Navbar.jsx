@@ -39,7 +39,7 @@ const Navbar = () => {
                 <>
                   <Link to="/admin"          className="nav-link nav-admin" onClick={() => setMenuOpen(false)}>Admin Dashboard</Link>
                   <div className="nav-user-section">
-                    <span className="nav-user-name nav-admin-badge">⚙ {user?.full_name}</span>
+                    <span className="nav-user-name nav-admin-badge">{user?.full_name}</span>
                     <button className="nav-btn-logout" onClick={handleLogout} id="logout-btn">Logout</button>
                   </div>
                 </>
