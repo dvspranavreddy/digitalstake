@@ -9,7 +9,7 @@ const Subscription = () => {
   const [loading, setLoading] = useState('');
   const [currentSub, setCurrentSub] = useState(null);
   const [error, setError] = useState('');
-  const { user } = useAuth();
+  const { user, refreshSubscription } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +56,8 @@ const Subscription = () => {
               razorpay_signature: response.razorpay_signature,
               plan_type: planType,
             });
-            window.location.href = '/dashboard';
+            await refreshSubscription();
+            navigate('/dashboard');
           } catch (err) {
             setError('Payment verification failed. Please contact support.');
             setLoading('');
