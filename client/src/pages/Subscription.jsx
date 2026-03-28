@@ -49,15 +49,17 @@ const Subscription = () => {
         order_id: data.order.id,
         handler: async (response) => {
           try {
+            setLoading('verifying');
             await subscriptionService.verifyPayment({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               plan_type: planType,
             });
-            navigate('/dashboard');
+            window.location.href = '/dashboard';
           } catch (err) {
             setError('Payment verification failed. Please contact support.');
+            setLoading('');
           }
         },
         prefill: {
@@ -66,16 +68,21 @@ const Subscription = () => {
           contact: '9999999999',  // test-mode placeholder
         },
         theme: { color: '#6ee7b7' },
+        modal: {
+          ondismiss: function() {
+            setLoading('');
+          }
+        }
       };
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', () => {
         setError('Payment failed. Please try again.');
+        setLoading('');
       });
       rzp.open();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create order');
-    } finally {
       setLoading('');
     }
   };
@@ -122,7 +129,7 @@ const Subscription = () => {
                 disabled={!!loading || preventNewSub}
                 id={`subscribe-${plan.id}`}
               >
-                {loading === plan.id ? 'Processing...' : preventNewSub ? 'Active Plan' : (currentSub?.status === 'active' ? 'Renew Plan' : 'Subscribe Now')}
+                {loading === 'verifying' ? 'Verifying payment...' : loading === plan.id ? 'Processing...' : preventNewSub ? 'Active Plan' : (currentSub?.status === 'active' ? 'Renew Plan' : 'Subscribe Now')}
               </button>
             </div>
           ))}
