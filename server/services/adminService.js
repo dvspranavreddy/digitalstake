@@ -11,13 +11,15 @@ const getAnalytics = async () => {
     .eq('role', 'user');
 
   // Active subscriptions with user charity pct
-  const { data: activeSubs, count: activeSubCount } = await supabase
+  const { data: activeSubs } = await supabase
     .from('subscriptions')
     .select(`
       id, amount,
       users ( charity_contribution_pct )
     `)
     .eq('status', 'active');
+
+  const activeSubCount = activeSubs ? activeSubs.length : 0;
 
   // Exact MRR / current pool
   const totalRevenue = activeSubs

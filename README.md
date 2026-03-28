@@ -34,37 +34,37 @@ The standard Stripe testing card (`4111 1111 1111 1111`) was intentionally bypas
 ## 📸 Platform Previews & Comprehensive Functionality Showcase
 
 ### 1. Dynamic UI & Live Charity Pooling
-![Home Page View](./docs/screenshots/whatsapp%2016.30.33.jpeg)
+![Home Page View](./docs/screenshots/Charity.jpeg)
 **Functionality Detail:** The platform's frontend relies on a highly responsive, modern aesthetic (Glassmorphism, smooth gradients, and engaging micro-animations).
 - **User Engagement**: Upon registration, users are seamlessly guided towards a dynamic slider where they choose exactly which charity receives their funds (between 10% and 50% of the base tier).
 - **Real-Time Motivation**: The interface renders aggregated financial impacts immediately, rewarding subscribers with a sense of tangible community contribution before they even enter the active lottery draw.
 
 ### 2. Administrator Analytics & System Health
-![Admin Analytics](./docs/screenshots/whatsapp%2016.30.32.jpeg)
+![Admin Analytics](./docs/screenshots/AdminAnalytics.jpeg)
 **Functionality Detail:** The Admin Dashboard acts as the central intelligence hub for platform operations.
 - **Accurate Ledgering & Rollovers**: You can track `Total Revenue`, exact `Charitable Allocations`, and live `Prize Pools` derived directly from user database mathematics.
 - **Responsive Command**: Crucially, data tables and analytic grids dynamically adapt to tablet and mobile bounds using non-breaking horizontal scrolling mechanisms (`overflow-x: auto`), keeping the dashboard 100% accessible via an iPhone.
 
 ### 3. Campaign Integrity & B2B Expansion
-![Campaign Engine](./docs/screenshots/whatsapp%2016.30.31.jpeg)
+![Campaign Engine](./docs/screenshots/AdminCampaign.jpeg)
 **Functionality Detail:** A fully standalone admin module to invite external partnerships.
 - **Corporate Linking**: Expanding beyond direct consumers, the included **Campaign Framework** enables frictionless B2B integration. Generate a Promo Code (like `HACKATHON_TEAM`), define a custom discount logic, and effortlessly track how many conversions that single business channel brought into the ecosystem.
 - **Fixed Charities**: Administrators can optionally lock a promotional code to force absolute contributions to a specific Charity event, overriding the user's choice.
 
 ### 4. Mathematical Draw Simulations
-![Draw Tracking](./docs/screenshots/whatsapp%20draw%20tracking.jpeg)
+![Draw Tracking](./docs/screenshots/AdminDashboard.jpeg)
 **Functionality Detail:** DigitalStake separates raw chance from administrative control.
 - **Simulations Before Publishing**: Admins can safely mock multiple "Draw Simulations" using specialized algorithms (`Random`, `Most Frequent Picks`, `Least Frequent Picks`) to analyze potential payouts *before* locking them in to the public ledger.
 - **Jackpot Rollovers**: If the system detects zero matching `5-Match` criteria in an officially published draw, the primary jackpot mathematically rolls over to the next month's Draw engine seamlessly.
 
 ### 5. Winner Verification Flows
-![Winner Validation](./docs/screenshots/whatsapp%20winner%20validation.jpeg)
+![Winner Validation](./docs/screenshots/flow.jpeg)
 **Functionality Detail:** A stringent verification UI to ensure payouts reach valid players.
 - **Matched Tiers**: Payout percentages dynamically split and calculate themselves between 5-Match (Jackpot), 4-Match, and 3-Match subsets.
 - **Proof of ID**: Winning users can securely browse their results and securely upload identity proof via a digital form. Administrators review these uploads, hit `Verify`, and mark the ledger as `Paid` upon successful ACH.
 
 ### 6. The Subscription Engine (Razorpay Integration)
-![Subscription Portal](./docs/screenshots/whatsapp%20subscription.jpeg)
+![Subscription Portal](./docs/screenshots/razorpay.jpeg)
 **Functionality Detail:** The lifeblood of the platform, built autonomously via external domestic gateways.
 - **Tiers**: Subscribers choose an active billing tier (`₹499/mo` or `₹4,990/yr`).
 - **Gateway Syncing**: The Node.js server automatically negotiates order IDs with Razorpay, allowing safe, external payment processing without touching raw card data.
