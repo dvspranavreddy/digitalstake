@@ -38,6 +38,7 @@ export const charityService = {
 
 export const drawService = {
   getAll: () => api.get('/draws'),
+  getMyDrawsCount: () => api.get('/draws/me/count'),
   getById: (id) => api.get(`/draws/${id}`),
   simulate: (logicOption) => api.post('/draws/simulate', { logicOption }, { timeout: 60000 }),
   publish: (id) => api.post(`/draws/${id}/publish`, {}, { timeout: 60000 }),

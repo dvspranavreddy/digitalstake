@@ -360,6 +360,16 @@ const publishDraw = async (drawId) => {
   };
 };
 
+const getMyDrawsCount = async (userId) => {
+  const { count, error } = await supabase
+    .from('draw_entries')
+    .select('draw_id', { count: 'exact', head: true })
+    .eq('user_id', userId);
+
+  if (error) throw new Error(error.message);
+  return count || 0;
+};
+
 const getDraws = async () => {
   const { data, error } = await supabase
     .from('draws')
@@ -433,4 +443,4 @@ const chunkedInsert = async (table, records, chunkSize = 500) => {
   }
 };
 
-module.exports = { simulateDraw, publishDraw, getDraws, getDrawById, generateDrawNumbers };
+module.exports = { simulateDraw, publishDraw, getDraws, getDrawById, generateDrawNumbers, getMyDrawsCount };

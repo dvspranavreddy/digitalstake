@@ -12,6 +12,15 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+router.get('/me/count', authenticate, async (req, res) => {
+  try {
+    const count = await drawService.getMyDrawsCount(req.user.id);
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/:id', authenticate, async (req, res) => {
   try {
     const draw = await drawService.getDrawById(req.params.id);

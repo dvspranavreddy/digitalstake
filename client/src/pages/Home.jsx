@@ -15,21 +15,24 @@ const SubscriberHome = () => {
   const [draws, setDraws] = useState([]);
   const [charity, setCharity] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [drawsCount, setDrawsCount] = useState(0);
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const [subRes, scoresRes, winRes, drawsRes] = await Promise.all([
+        const [subRes, scoresRes, winRes, drawsRes, countRes] = await Promise.all([
           subscriptionService.getStatus(),
           scoreService.getScores(),
           winnerService.getMyWinnings(),
           drawService.getAll(),
+          drawService.getMyDrawsCount(),
         ]);
         
         setSubscription(subRes.data);
         setScores(scoresRes.data);
         setWinnings(winRes.data);
         setDraws(drawsRes.data);
+        setDrawsCount(countRes.data?.count || 0);
 
         if (user?.charity_id) {
           const charityRes = await charityService.getById(user.charity_id);
@@ -62,7 +65,6 @@ const SubscriberHome = () => {
   const showExpiryWarning = isActive && daysToExpiry !== null && daysToExpiry <= 7 && daysToExpiry >= 0;
 
   const totalWon = winnings.reduce((sum, w) => sum + (w.prize_amount || 0), 0);
-  const publishedDrawsCount = draws.filter(d => d.status === 'published').length;
 
   if (loading) {
     return (
@@ -123,7 +125,7 @@ const SubscriberHome = () => {
                 </div>
                 <div className="stat-pill">
                   <span className="stat-pill-label">Draws Played</span>
-                  <span className="stat-pill-value">{publishedDrawsCount}</span>
+                  <span className="stat-pill-value">{drawsCount}</span>
                 </div>
               </div>
             </div>
