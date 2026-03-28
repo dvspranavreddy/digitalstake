@@ -39,10 +39,37 @@
   background: linear-gradient(90deg, #fb7185, #f59e0b, #e11d48);
 }
 
-.sub-gate-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1.25rem;
+.sub-gate-icon-lock {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.25rem;
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   animation: gatePulse 2s ease-in-out infinite;
+}
+
+.sub-gate-icon-lock::before {
+  content: '';
+  width: 18px;
+  height: 14px;
+  border: 3px solid white;
+  border-radius: 10px 10px 0 0;
+  position: absolute;
+  top: 12px;
+}
+
+.sub-gate-icon-lock::after {
+  content: '';
+  width: 22px;
+  height: 16px;
+  background: white;
+  border-radius: 3px;
+  position: absolute;
+  bottom: 14px;
 }
 
 @keyframes gatePulse {
@@ -93,11 +120,13 @@
   padding: 0.4rem 0;
 }
 
-.benefit-icon {
-  font-size: 1.2rem;
-  width: 32px;
-  text-align: center;
+.benefit-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e11d48, #fb7185);
   flex-shrink: 0;
+  margin-left: 4px;
 }
 
 .sub-gate-cta {

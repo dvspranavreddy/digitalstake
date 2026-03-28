@@ -276,7 +276,7 @@ const Scores = () => {
             <p className="no-scores">No scores entered yet. Add your first score above!</p>
           )}
           {scores.length >= 5 && (
-            <p className="score-note">✦ Adding a new score will automatically replace the oldest one.</p>
+            <p className="score-note">Adding a new score will automatically replace the oldest one.</p>
           )}
         </div>
 

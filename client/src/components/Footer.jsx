@@ -31,7 +31,7 @@ const Footer = () => {
         </div>
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} DigitalStake. All rights reserved.</p>
-          <p className="footer-tagline">Every score makes an impact ✦</p>
+          <p className="footer-tagline">Every score makes an impact</p>
         </div>
       </div>
     </footer>

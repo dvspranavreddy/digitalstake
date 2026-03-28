@@ -83,7 +83,7 @@ const SubscriberHome = () => {
           <div className="hero-orb hero-orb-3"></div>
         </div>
         <div className="sub-hero-content">
-          <div className="hero-badge">✦ Welcome back, {firstName}!</div>
+          <div className="hero-badge">Welcome back, {firstName}!</div>
           <h1 className="hero-title">
             Your Dashboard,<br />
             <span className="hero-gradient">Your Journey.</span>
@@ -299,7 +299,7 @@ const PublicHome = () => {
           <div className="hero-orb hero-orb-3"></div>
         </div>
         <div className="hero-content">
-          <div className="hero-badge">✦ A new way to make an impact</div>
+          <div className="hero-badge">A new way to make an impact</div>
           <h1 className="hero-title">
             Your Scores.<br />
             <span className="hero-gradient">Real Prizes.</span><br />

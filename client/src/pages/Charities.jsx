@@ -77,6 +77,12 @@ const Charities = () => {
             });
             alert('Thank you for your generous donation!');
             setDonationAmount(500);
+            // Refresh impact totals immediately after donation
+            if (selectedCharity) {
+              charityService.getTotalDonations(selectedCharity.id)
+                .then(res => setTotalDonations(res.data))
+                .catch(() => {});
+            }
           } catch (err) {
             alert('Verification failed, please contact support');
           }
@@ -128,7 +134,7 @@ const Charities = () => {
               className={`filter-btn ${filter === 'featured' ? 'active' : ''}`} 
               onClick={() => setFilter('featured')}
             >
-              ⭐ Featured
+              Featured
             </button>
           </div>
         </div>
@@ -237,7 +243,7 @@ const Charities = () => {
               {/* Non-subscriber: show deadlines are hidden */}
               {!isSubscribed && selectedCharity.events && selectedCharity.events.length > 0 && (
                 <div className="sub-gate-inline" style={{ marginBottom: '2rem' }}>
-                  <div className="sub-gate-inline-icon">📅</div>
+                  <div className="sub-gate-inline-icon" style={{ fontSize: '1rem', color: '#e11d48', fontWeight: 800 }}>Deadlines</div>
                   <p className="sub-gate-inline-text">
                     This charity has <strong>{selectedCharity.events.length}</strong> upcoming {selectedCharity.events.length === 1 ? 'deadline' : 'deadlines'}. Subscribe to view detailed goals and deadlines.
                   </p>
@@ -296,7 +302,7 @@ const Charities = () => {
                     ) : (
                       /* Non-subscriber: gate charity switching */
                       <div className="sub-gate-inline">
-                        <div className="sub-gate-inline-icon">🔄</div>
+                        <div className="sub-gate-inline-icon" style={{ fontSize: '1rem', color: '#e11d48', fontWeight: 800 }}>Switch Charity</div>
                         <p className="sub-gate-inline-text">
                           Want to support {selectedCharity.name} as your primary charity? Subscribe to choose and switch charities.
                         </p>

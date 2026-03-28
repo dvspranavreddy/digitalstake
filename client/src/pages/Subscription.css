@@ -164,7 +164,7 @@
 }
 
 .plan-features li::before {
-  content: '✦';
+  content: '•';
   color: #ff7eb3;
   font-weight: bold;
 }

@@ -6,30 +6,30 @@ const SubscriptionGate = ({ title, message }) => {
     <div className="sub-gate-page">
       <div className="sub-gate-container">
         <div className="sub-gate-card">
-          <div className="sub-gate-icon">🔒</div>
+          <div className="sub-gate-icon-lock"></div>
           <h2 className="sub-gate-title">{title || "Subscribers Only"}</h2>
           <p className="sub-gate-message">
             {message || "You're not subscribed yet. Subscribe to unlock all premium features and benefits!"}
           </p>
           <div className="sub-gate-benefits">
             <div className="sub-gate-benefit">
-              <span className="benefit-icon">🏌️</span>
+              <span className="benefit-dot"></span>
               <span>Track & manage your scores</span>
             </div>
             <div className="sub-gate-benefit">
-              <span className="benefit-icon">🎯</span>
+              <span className="benefit-dot"></span>
               <span>Enter monthly prize draws</span>
             </div>
             <div className="sub-gate-benefit">
-              <span className="benefit-icon">💚</span>
+              <span className="benefit-dot"></span>
               <span>Choose & switch charities</span>
             </div>
             <div className="sub-gate-benefit">
-              <span className="benefit-icon">🏆</span>
+              <span className="benefit-dot"></span>
               <span>Access winnings dashboard</span>
             </div>
             <div className="sub-gate-benefit">
-              <span className="benefit-icon">📊</span>
+              <span className="benefit-dot"></span>
               <span>Full dashboard experience</span>
             </div>
           </div>

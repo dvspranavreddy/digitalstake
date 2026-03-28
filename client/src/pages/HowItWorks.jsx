@@ -7,7 +7,7 @@ const HowItWorks = () => {
       {/* Hero Section */}
       <section className="hiw-hero">
         <div className="hiw-hero-content">
-          <div className="hiw-badge">✦ Transparent. Fair. Rewarding.</div>
+          <div className="hiw-badge">Transparent. Fair. Rewarding.</div>
           <h1 className="hiw-title">
             Draw <span className="hiw-gradient">Mechanics</span> — Explained
           </h1>
@@ -32,7 +32,7 @@ const HowItWorks = () => {
                 To enter, pick a monthly or yearly plan. A minimum of 10% automatically goes to your chosen charity.
               </p>
               <ul className="hiw-list">
-                <li><span>✦</span> <strong>Plans:</strong> From ₹499/month.</li>
+                <li><strong>Plans:</strong> From ₹499/month.</li>
               </ul>
             </div>
 
@@ -45,7 +45,7 @@ const HowItWorks = () => {
                 Log 5 Stableford scores (1–45). When you log a 6th score, it simply replaces your oldest one.
               </p>
               <ul className="hiw-list">
-                <li><span>✦</span> <strong>Validation:</strong> Exact 5 scores needed.</li>
+                <li><strong>Validation:</strong> Exact 5 scores needed.</li>
               </ul>
             </div>
 
@@ -58,7 +58,7 @@ const HowItWorks = () => {
                 At month's end, 5 unique balls are randomly drawn. Match 3, 4, or all 5 numbers to win!
               </p>
               <ul className="hiw-list">
-                <li><span>✦</span> <strong>Payouts:</strong> Automated verifications.</li>
+                <li><strong>Payouts:</strong> Automated verifications.</li>
               </ul>
             </div>
 
@@ -81,7 +81,7 @@ const HowItWorks = () => {
                 <span className="hiw-tier-pct">40%</span>
               </div>
               <p className="hiw-tier-desc">The Jackpot! Match all 5 randomly drawn numbers.</p>
-              <div className="hiw-tier-feature">✦ Rolls over to the next month if unclaimed!</div>
+              <div className="hiw-tier-feature">Rolls over to the next month if unclaimed!</div>
               <div className="hiw-glow"></div>
             </div>
             
